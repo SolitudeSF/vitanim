@@ -34,6 +34,18 @@ proc sparse*[W, H: static[int], T](default: T, xs: seq[(int, int, T)]): Grid[W, 
     let (i, j, value) = x
     result[i][j] = value
 
+template mapIt*[W, H, T](grid: Grid[W, H, T], op: untyped): untyped =
+  type outType = typeof( (var it {.inject.}: T; op), typeOfProc)
+
+  var result: Grid[W, H, outType]
+
+  for i in 0..<H:
+    var j = 0
+    for it {.inject.} in grid[i]:
+      result[i][j] = op
+      j += 1
+  result
+
 proc map*[W, H: static[int], T, U](grid: Grid[W, H, T], f: proc(t: T): U): Grid[W, H, U] =
   for j in 0..<H:
     for i in 0..<W:

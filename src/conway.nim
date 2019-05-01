@@ -12,7 +12,7 @@ proc toColor(cell: Cell): Color =
     Color(r: 255, g: 0, b: 0, a: 255)
 
 proc render*[W, H: static[int]](grid: Grid[W, H, Cell], renderer: Renderer) =
-  grid.map(toColor).render(renderer)
+  grid.mapIt(it.toColor).render(renderer)
 
 proc neighbors[W, H: static[int]](grid: Grid[W, H, Cell], i, j: int): int =
   for dj in -1..1:
